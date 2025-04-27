@@ -1,10 +1,7 @@
-import { useParams } from 'react-router-dom'
-
-const Post = () => {
-  const { id } = useParams()
+const User = () => {
   return (
-    <h1>文章ID: { id }</h1>
+    <h1>用户</h1>
   )
 }
 
-export default Post
+export default User

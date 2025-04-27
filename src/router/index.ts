@@ -16,7 +16,13 @@ export const routes: Array<Route> = [
     component: () => import('../pages/Home')
   },
   {
-    id: 1,
+    id: 2,
+    title: '用户',
+    path: '/user',
+    component: () => import('../pages/User')
+  },
+  {
+    id: 3,
     title: '文章',
     path: '/post/:id',
     link: '/post/1024',

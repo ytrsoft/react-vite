@@ -1,12 +1,7 @@
 import { DynamicComponent, routes } from './router'
 import { useState, lazy, Suspense, FC, useEffect } from 'react'
 import { Routes, Route, Link, useLocation } from 'react-router-dom'
-
-const Loading = () => (
-  <div className="fixed top-0 left-0 right-0 bottom-0 bg-opacity-50 flex justify-center items-center z-50">
-    <div className="w-16 h-16 border-4 border-t-transparent rounded-full animate-spin border-gray-600"></div>
-  </div>
-)
+import Loading from './components/loading'
 
 const NotFound = () => (
   <div className="flex justify-center items-center h-full">
@@ -33,7 +28,7 @@ const App: FC = () => {
 
   const routeChange = () => {
     const pathname = location.pathname
-    const index = routes.findIndex(({path, link}) => {
+    const index = routes.findIndex(({ path, link }) => {
       return link === pathname || path === pathname
     })
     setActiveTab(index)
@@ -43,7 +38,7 @@ const App: FC = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-gray-100">
-      <nav className="bg-gray-800 p-4">
+      <nav className="bg-gray-800 p-4 fixed top-0 w-full z-10">
         <div className="container flex items-center">
           <ul className="flex space-x-4">
             {routes.map(({ id, link, path, title }) => (
@@ -64,7 +59,7 @@ const App: FC = () => {
           </ul>
         </div>
       </nav>
-      <div className="flex-grow p-4 bg-white">
+      <div className="flex-grow p-4 bg-white mt-10">
         <Routes>
           {routes.map(({ id, path, component }) => (
             <Route
