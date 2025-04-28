@@ -67,6 +67,12 @@ export const routes: Array<Route> = [
   },
   {
     id: 10,
+    title: 'Optimistic',
+    path: '/optimistic',
+    component: lazy(() =>import('../pages/Optimistic'))
+  },
+  {
+    id: 11,
     title: '文章',
     path: '/post/:id',
     link: '/post/1024?ver=1.0',
