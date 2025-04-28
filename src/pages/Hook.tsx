@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react'
-import { useDebounce, useThrottle } from '../hook'
+import React, { useState, useEffect, useDeferredValue } from 'react'
+import { useThrottle } from '../hook'
 
 const Hook = () => {
 
   const [query, setQuery] = useState('')
-  const [debouncedQuery, setDebouncedQuery] = useState('')
-  const debouncedHandler = useDebounce((newQuery: string) => {
-    setDebouncedQuery(newQuery)
-  }, 600)
+  const debouncedQuery = useDeferredValue(query)
+  // const [debouncedQuery, setDebouncedQuery] = useState('')
+  // const debouncedHandler = useDebounce((newQuery: string) => {
+  //   setDebouncedQuery(newQuery)
+  // }, 600)
 
   const [scrollPosition, setScrollPosition] = useState(0)
   const throttledScrollHandler = useThrottle(() => {
@@ -17,7 +18,7 @@ const Hook = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value)
-    debouncedHandler(e.target.value)
+    // debouncedHandler(e.target.value)
   }
 
   useEffect(() => {

@@ -1,4 +1,5 @@
 import React, {
+  use,
   useMemo,
   useRef,
   useState,
@@ -44,6 +45,7 @@ const HookDemo = () => {
 
   const handleClick = useCallback(() => setCount(count + 1), [count])
 
+  const useTheme = use(ThemeContext)
 
   const theme = useContext(ThemeContext)
 
@@ -59,6 +61,7 @@ const HookDemo = () => {
       </div>
       <div>State: { state.count }</div>
       <div>主题: { theme }</div>
+      <div>主题: { useTheme }</div>
       <div>
         <button
           onClick={() => dispatch({ type: 'increment' })}
