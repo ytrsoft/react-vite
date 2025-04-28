@@ -2,7 +2,7 @@ import { MockMethod } from 'vite-plugin-mock'
 import Mock from 'mockjs'
 
 const userList = Mock.mock({
-  'list|20000': [
+  'list|72': [
     {
       'id|+1': 1,
       name: '@cname',

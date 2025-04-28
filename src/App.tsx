@@ -37,41 +37,44 @@ const App: FC = () => {
   useEffect(routeChange, [location])
 
   return (
-    <div className="flex flex-col min-h-screen bg-gray-100">
-      <nav className="bg-gray-800 p-4 fixed top-0 w-full z-10">
-        <div className="container flex items-center">
-          <ul className="flex space-x-4">
-            {routes.map(({ id, link, path, title }) => (
-              <li key={id}>
-                <Link
-                  to={link || path}
-                  className={`${
-                    activeTab === id
-                      ? 'text-white font-semibold'
-                      : 'text-gray-300'
-                  } hover:text-white transition-colors`}
-                  onClick={() => setActiveTab(id)}
-                >
-                  {title}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-      <div className="flex-grow p-4 bg-white mt-10">
-        <Routes>
-          {routes.map(({ id, path, component }) => (
-            <Route
-              key={id}
-              path={path}
-              element={<Component is={component} />}
-            />
+  <div className="flex flex-col min-h-screen bg-gray-100">
+    <nav className="bg-gray-800 p-4 fixed top-0 w-full z-10">
+      <div className="container flex items-center">
+        <ul className="flex space-x-4">
+          {routes.map(({ id, link, path, title }) => (
+            <li key={id}>
+              <Link
+                to={link || path}
+                className={`${
+                  activeTab === id
+                    ? 'text-white font-semibold'
+                    : 'text-gray-300'
+                } hover:text-white transition-colors`}
+                onClick={() => setActiveTab(id)}
+              >
+                {title}
+              </Link>
+            </li>
           ))}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+          <li>
+            <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>设置主题</button>
+          </li>
+        </ul>
       </div>
+    </nav>
+    <div className="flex-grow p-4 bg-white mt-10">
+      <Routes>
+        {routes.map(({ id, path, component }) => (
+          <Route
+            key={id}
+            path={path}
+            element={<Component is={component} />}
+          />
+        ))}
+        <Route path="*" element={<NotFound />} />
+      </Routes>
     </div>
+  </div>
   )
 }
 

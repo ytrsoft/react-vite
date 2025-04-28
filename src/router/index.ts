@@ -21,13 +21,13 @@ export const routes: Array<Route> = [
     path: '/user',
     component: () => import('../pages/User')
   },
-  {
-    id: 3,
-    title: '文章',
-    path: '/post/:id',
-    link: '/post/1024',
-    component: () => import('../pages/Post')
-  }
+  // {
+  //   id: 3,
+  //   title: '文章',
+  //   path: '/post/:id',
+  //   link: '/post/1024',
+  //   component: () => import('../pages/Post')
+  // }
 ]
 
 
