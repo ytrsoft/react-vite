@@ -1,6 +1,6 @@
-import { DynamicComponent, routes } from './router'
-import { useState, lazy, Suspense, FC, useEffect } from 'react'
-import { Routes, Route, Link, useLocation } from 'react-router-dom'
+import { type RouteComponent, routes } from './router'
+import { useState, Suspense, FC, useEffect } from 'react'
+import { Routes, Route, Link, useLocation, useMatch } from 'react-router-dom'
 import Loading from './components/loading'
 
 const NotFound = () => (
@@ -10,11 +10,11 @@ const NotFound = () => (
 )
 
 type CProps = {
-  is: DynamicComponent
+  is: RouteComponent
 }
 
 const Component: FC<CProps> = ({ is }) => {
-  const Warp = lazy(is)
+  const Warp = is
   return (
     <Suspense fallback={<Loading />}>
       <Warp />
@@ -23,6 +23,7 @@ const Component: FC<CProps> = ({ is }) => {
 }
 
 const App: FC = () => {
+  const isHome = useMatch('/')
   const location = useLocation()
   const [activeTab, setActiveTab] = useState(routes[0].id)
 
@@ -56,6 +57,7 @@ const App: FC = () => {
               </Link>
             </li>
           ))}
+          <li className="text-red">{isHome && '首页'}</li>
         </ul>
       </div>
     </nav>

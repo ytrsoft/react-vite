@@ -1,11 +1,13 @@
-export type DynamicComponent = () => Promise<{ default: React.ComponentType }>
+import { lazy, LazyExoticComponent } from 'react'
+
+export type RouteComponent = LazyExoticComponent<React.ComponentType<any>>
 
 export interface Route {
   id: number,
   path: string
   title: string
   link?: string
-  component: DynamicComponent
+  component: RouteComponent
 }
 
 export const routes: Array<Route> = [
@@ -13,44 +15,44 @@ export const routes: Array<Route> = [
     id: 0,
     path: '/',
     title: '首页',
-    component: () => import('../pages/Home')
+    component: lazy(() =>import('../pages/Home'))
   },
   {
     id: 2,
     title: '用户',
     path: '/user',
-    component: () => import('../pages/User')
+    component: lazy(() =>import('../pages/User'))
   },
   {
     id: 3,
     title: 'Unstated',
     path: '/unstated',
-    component: () => import('../pages/Unstated')
+    component: lazy(() =>import('../pages/Unstated'))
   },
   {
     id: 4,
     title: 'Redux',
     path: '/redux',
-    component: () => import('../pages/MyRedux')
+    component: lazy(() =>import('../pages/MyRedux'))
   },
   {
     id: 5,
     title: 'Thunk',
     path: '/thunk',
-    component: () => import('../pages/MyThunk')
+    component: lazy(() =>import('../pages/MyThunk'))
   },
   {
     id: 6,
     title: 'Saga',
     path: '/saga',
-    component: () => import('../pages/MySaga')
+    component: lazy(() =>import('../pages/MySaga'))
   },
   {
     id: 7,
     title: '文章',
     path: '/post/:id',
-    link: '/post/1024',
-    component: () => import('../pages/Post')
+    link: '/post/1024?ver=1.0',
+    component: lazy(() =>import('../pages/Post'))
   }
 ]
 
