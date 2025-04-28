@@ -41,6 +41,12 @@ export const routes: Array<Route> = [
   },
   {
     id: 6,
+    title: 'Saga',
+    path: '/saga',
+    component: () => import('../pages/MySaga')
+  },
+  {
+    id: 7,
     title: '文章',
     path: '/post/:id',
     link: '/post/1024',
