@@ -79,6 +79,12 @@ export const routes: Array<Route> = [
   },
   {
     id: 11,
+    title: 'Echarts',
+    path: '/echarts',
+    component: lazy(() =>import('../pages/EchartsDemo'))
+  },
+  {
+    id: 12,
     title: '文章',
     path: '/post/:id',
     link: '/post/1024?ver=1.0',
