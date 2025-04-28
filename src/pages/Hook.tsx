@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useDeferredValue } from 'react'
-import { useThrottle } from '../hook'
+import { useThrottle, useNetworkState } from '../hook'
 
 const Hook = () => {
 
@@ -9,6 +9,7 @@ const Hook = () => {
   // const debouncedHandler = useDebounce((newQuery: string) => {
   //   setDebouncedQuery(newQuery)
   // }, 600)
+  const state = useNetworkState()
 
   const [scrollPosition, setScrollPosition] = useState(0)
   const throttledScrollHandler = useThrottle(() => {
@@ -34,6 +35,7 @@ const Hook = () => {
 
   return (
     <div className="p-6 space-y-6">
+      <h1>网络状态: {state}</h1>
       <div className="flex flex-col space-y-4">
         <label className="text-lg font-semibold">防抖</label>
         <input
