@@ -41,24 +41,21 @@ const App: FC = () => {
     <nav className="bg-gray-800 p-4 fixed top-0 w-full z-10">
       <div className="container flex items-center">
         <ul className="flex space-x-4">
-          {routes.map(({ id, link, path, title }) => (
+          {routes.map(({ id, link, path, title }, index) => (
             <li key={id}>
               <Link
                 to={link || path}
                 className={`${
-                  activeTab === id
+                  activeTab === index
                     ? 'text-white font-semibold'
                     : 'text-gray-300'
                 } hover:text-white transition-colors`}
-                onClick={() => setActiveTab(id)}
+                onClick={() => setActiveTab(index)}
               >
                 {title}
               </Link>
             </li>
           ))}
-          <li>
-            <button onClick={() => setTheme(theme === 'light' ? 'dark' : 'light')}>设置主题</button>
-          </li>
         </ul>
       </div>
     </nav>
