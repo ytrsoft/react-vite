@@ -29,6 +29,18 @@ export const routes: Array<Route> = [
   },
   {
     id: 4,
+    title: 'Redux',
+    path: '/redux',
+    component: () => import('../pages/MyRedux')
+  },
+  {
+    id: 5,
+    title: 'Thunk',
+    path: '/thunk',
+    component: () => import('../pages/MyThunk')
+  },
+  {
+    id: 6,
     title: '文章',
     path: '/post/:id',
     link: '/post/1024',
