@@ -50,6 +50,5 @@ const subscribe = (notify: () => void) => {
 }
 
 export const useNetworkState = () => {
-  console.log(navigator.onLine)
   return useSyncExternalStore(subscribe, getSnapshot)
 }

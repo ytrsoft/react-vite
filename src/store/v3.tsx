@@ -56,6 +56,8 @@ const counterReducer = (state = initialState, action: Action) => {
   }
 }
 
+export type RootState = ReturnType<typeof store.getState>
+
 // Saga Middleware
 const sagaMiddleware = createSagaMiddleware()
 
@@ -73,7 +75,7 @@ function* fetchUsersSaga(): Generator<Effect, void, any> {
     yield put(fetchUsersSuccess(data))
   } catch (error: any) {
     yield put(fetchUsersFailure(error.message))
-  } 
+  }
 }
 
 // Saga Watcher

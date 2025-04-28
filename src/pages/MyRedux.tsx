@@ -1,13 +1,10 @@
 import { Provider, useSelector, useDispatch } from 'react-redux'
-import { store, increment, decrement } from '../store/v1'
+import { State, store, increment, decrement } from '../store/v1'
 
 
 const Child = () => {
   const dispatch = useDispatch()
-  const { count } = useSelector((state: any) => state)
-
-
-
+  const count = useSelector((state: State) => state.count)
   return (
     <div className="py-2 space-y-2">
       <h1>State: { count }</h1>

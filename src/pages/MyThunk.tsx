@@ -1,16 +1,16 @@
 import Loading from '../components/loading'
 import { Provider, useDispatch, useSelector } from 'react-redux'
-import { store, fetchUsers, UserDispatch } from '../store/v2'
+import { store, fetchUsers, UserDispatch, RootState } from '../store/v2'
 import { useEffect } from 'react'
 
 const User = () => {
 
   const dispatch = useDispatch<UserDispatch>()
 
-  const { users, loading } = useSelector((state: any) => state)
+  const users = useSelector((state: RootState) => state.users)
+  const loading = useSelector((state: RootState) => state.loading)
 
   useEffect(() => {
-
     dispatch(fetchUsers())
   }, [dispatch])
 

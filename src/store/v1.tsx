@@ -5,6 +5,10 @@ interface Action {
   type: string
 }
 
+export interface State {
+  count: number
+}
+
 // Action Creators
 export const increment = () => ({
   type: 'INCREMENT'
