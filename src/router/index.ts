@@ -72,19 +72,19 @@ export const routes: Array<Route> = [
     component: lazy(() =>import('../pages/Optimistic'))
   },
   {
-    id: 10,
+    id: 11,
     title: 'DeferredValue',
     path: '/deferredValue',
     component: lazy(() =>import('../pages/DeferredValue'))
   },
   {
-    id: 11,
+    id: 12,
     title: 'Echarts',
     path: '/echarts',
     component: lazy(() =>import('../pages/EchartsDemo'))
   },
   {
-    id: 12,
+    id: 13,
     title: '文章',
     path: '/post/:id',
     link: '/post/1024?ver=1.0',
