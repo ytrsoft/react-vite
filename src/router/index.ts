@@ -49,6 +49,12 @@ export const routes: Array<Route> = [
   },
   {
     id: 7,
+    title: 'Hook',
+    path: '/hook',
+    component: lazy(() =>import('../pages/Hook'))
+  },
+  {
+    id: 8,
     title: '文章',
     path: '/post/:id',
     link: '/post/1024?ver=1.0',
