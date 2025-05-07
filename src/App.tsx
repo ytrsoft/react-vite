@@ -1,5 +1,4 @@
 import { useRef, useState } from 'react'
-import axios from 'axios'
 
 const App = () => {
   const fileRef = useRef<HTMLInputElement>(null)
