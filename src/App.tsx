@@ -1,79 +1,108 @@
-import { type RouteComponent, routes } from './router'
-import { useState, Suspense, FC, useEffect } from 'react'
-import { Routes, Route, Link, useLocation, useMatch } from 'react-router-dom'
-import Loading from './components/loading'
+import { useRef, useState } from 'react'
+import axios from 'axios'
 
-const NotFound = () => (
-  <div className="flex justify-center items-center h-full">
-    <h1 className="text-4xl text-gray-600">404</h1>
-  </div>
-)
+const App = () => {
+  const fileRef = useRef<HTMLInputElement>(null)
+  const [selectedFile, setSelectedFile] = useState<File | null>(null)
+  const [uploadProgress, setUploadProgress] = useState<number>(0)
+  const [isUploading, setIsUploading] = useState<boolean>(false)
 
-type CProps = {
-  is: RouteComponent
-}
-
-const Component: FC<CProps> = ({ is }) => {
-  const Warp = is
-  return (
-    <Suspense fallback={<Loading />}>
-      <Warp />
-    </Suspense>
-  )
-}
-
-const App: FC = () => {
-  const isHome = useMatch('/')
-  const location = useLocation()
-  const [activeTab, setActiveTab] = useState(routes[0].id)
-
-  const routeChange = () => {
-    const pathname = location.pathname
-    const index = routes.findIndex(({ path, link }) => {
-      return link === pathname || path === pathname
-    })
-    setActiveTab(index)
+  const handleSelectFile = () => {
+    fileRef.current?.click()
   }
 
-  useEffect(routeChange, [location])
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file) {
+      setSelectedFile(file)
+      setUploadProgress(0)
+      setIsUploading(false)
+    }
+  }
+
+  const handleUpload = async () => {
+    if (!selectedFile) return
+    setIsUploading(true)
+    const formData = new FormData()
+    formData.append('file', selectedFile)
+    try {
+      console.log('分片上传')
+      setIsUploading(false)
+    } catch (error) {
+      console.error('上传失败:', error)
+      setIsUploading(false)
+      setUploadProgress(0)
+    }
+  }
+
+  const handleContinueUpload = () => {
+    console.log('继续上传')
+  }
+
+  const handleInstantUpload = () => {
+    console.log('秒传')
+    setUploadProgress(100)
+  }
 
   return (
-  <div className="flex flex-col min-h-screen bg-gray-100">
-    <nav className="bg-gray-800 p-4 fixed top-0 w-full z-10">
-      <div className="container flex items-center">
-        <ul className="flex space-x-4">
-          {routes.map(({ id, link, path, title }, index) => (
-            <li key={id}>
-              <Link
-                to={link || path}
-                className={`${
-                  activeTab === index
-                    ? 'text-white font-semibold'
-                    : 'text-gray-300'
-                } hover:text-white transition-colors`}
-                onClick={() => setActiveTab(index)}
-              >
-                {title}
-              </Link>
-            </li>
-          ))}
-          <li className="text-red">{isHome && '首页'}</li>
-        </ul>
-      </div>
-    </nav>
-    <div className="flex-grow p-4 bg-white mt-10">
-      <Routes>
-        {routes.map(({ id, path, component }) => (
-          <Route
-            key={id}
-            path={path}
-            element={<Component is={component} />}
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center p-4">
+      <div className="bg-gray-800 rounded-2xl shadow-xl p-8 w-full max-w-md">
+        <h2 className="text-2xl font-bold text-white mb-6 text-center">
+          文件上传
+        </h2>
+        <div className="space-y-4">
+          <input
+            ref={fileRef}
+            className="hidden"
+            type="file"
+            onChange={handleFileChange}
           />
-        ))}
-        <Route path="*" element={<NotFound />} />
-      </Routes>
+          {selectedFile && (
+            <div className="text-sm text-gray-300 bg-gray-700 p-3 rounded-lg">
+              <p>文件名: {selectedFile.name}</p>
+              <p>大小: {(selectedFile.size / 1024).toFixed(2)} KB</p>
+              <p>类型: {selectedFile.type || '未知'}</p>
+            </div>
+          )}
+          <div className="w-full bg-gray-600 rounded-full h-2.5">
+            <div
+              className="bg-blue-500 h-2.5 rounded-full transition-all duration-300"
+              style={{ width: `${uploadProgress}%` }}
+            ></div>
+          </div>
+          <p className="text-sm text-gray-300 text-center">
+            上传进度: {uploadProgress}%
+          </p>
+          <div className="flex flex-col gap-3">
+            <button
+              onClick={handleSelectFile}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 rounded-lg transition-colors duration-200"
+            >
+              选择文件
+            </button>
+            <button
+              onClick={handleUpload}
+              disabled={isUploading || !selectedFile}
+              className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {isUploading ? '上传中...' : '开始上传'}
+            </button>
+            <button
+              onClick={handleContinueUpload}
+              className="w-full bg-yellow-600 hover:bg-yellow-700 text-white font-medium py-3 rounded-lg transition-colors duration-200"
+            >
+              继续上传
+            </button>
+            <button
+              onClick={handleInstantUpload}
+              className="w-full bg-purple-600 hover:bg-purple-700 text-white font-medium py-3 rounded-lg transition-colors duration-200"
+            >
+              秒传
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
   )
 }
 

@@ -14,6 +14,14 @@ export default defineConfig({
       enable: true,
       logger: true,
       cors: true
-  })
-  ]
+    })
+  ],
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:8080',
+        changeOrigin: true
+      }
+    }
+}
 })
