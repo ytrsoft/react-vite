@@ -34,14 +34,21 @@ const fileInst = newAxios('multipart/form-data')
 
 export interface Chunck {
   index: number
-  file: File
+  file: Blob
   hash: string
+  uploadId: string
 }
 
 export interface Merge {
   name: string
   hash: string
   chunks: number
+  uploadId: string
+}
+
+export interface Next {
+  hash: string
+  uploadId: string
 }
 
 export type ProgressHandler = (value: number) => void
@@ -54,19 +61,20 @@ export const state = (hash: string) => {
   return jsonInst.post('/file/state', { hash })
 }
 
-export const next = (hash: string) => {
-  return jsonInst.post('/file/next', { hash })
+export const next = (next: Next) => {
+  return jsonInst.post('/file/next', next)
 }
 
 export const merge = (data: Merge) => {
   return jsonInst.post('/file/merge', data)
 }
 
-export const upload = (chunck: Chunck, handle: ProgressHandler) => {
+export const upload = (chunck: Chunck, handle?: ProgressHandler) => {
   const body = new FormData()
   body.append('file', chunck.file)
   body.append('hash', chunck.hash)
-  body.append('index', chunck.file.toString())
+  body.append('index', chunck.index.toString())
+  body.append('uploadId', chunck.uploadId)
   return fileInst.post('/file/upload', body, {
     onUploadProgress: ({loaded, total}) => {
       handle && handle(total ? Math.round((loaded * 100) / total) : 0)

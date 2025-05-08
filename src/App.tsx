@@ -1,6 +1,11 @@
 import { useRef, useState } from 'react'
+import { useFile, USER_ID } from './hook/file'
+import { upload, merge, state, next } from './api'
 
 const App = () => {
+
+  const { execute } = useFile()
+  const fileHashRef = useRef('')
   const fileRef = useRef<HTMLInputElement>(null)
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [uploadProgress, setUploadProgress] = useState<number>(0)
@@ -22,25 +27,42 @@ const App = () => {
   const handleUpload = async () => {
     if (!selectedFile) return
     setIsUploading(true)
-    const formData = new FormData()
-    formData.append('file', selectedFile)
     try {
-      console.log('分片上传')
+      const { chunks, fileHash } = await execute(selectedFile, (v, t) => {
+        const progress = Math.floor((v / t) * 99)
+        setUploadProgress(progress)
+      })
+      const task = chunks.map((chunk) => upload(chunk))
+      await Promise.all(task)
+      await merge({
+        hash: fileHash,
+        name: selectedFile.name,
+        chunks: task.length,
+        uploadId: USER_ID
+      })
       setIsUploading(false)
+      fileHashRef.current = fileHash
+      setUploadProgress(100)
     } catch (error) {
-      console.error('上传失败:', error)
       setIsUploading(false)
       setUploadProgress(0)
     }
   }
 
-  const handleContinueUpload = () => {
-    console.log('继续上传')
+  const handleContinueUpload = async() => {
+    await next({
+      hash: fileHashRef.current,
+      uploadId: USER_ID
+    })
   }
 
-  const handleInstantUpload = () => {
-    console.log('秒传')
-    setUploadProgress(100)
+  const handleInstantUpload = async() => {
+    const fileState: any = await state(fileHashRef.current)
+    if (fileState.exists) {
+      setUploadProgress(100)
+    } else {
+      setUploadProgress(0)
+    }
   }
 
   return (

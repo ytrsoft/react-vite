@@ -4,7 +4,7 @@ export type Effect = (...args: Array<any>) => void
 
 export const useDebounce = <T extends Effect>(callback: T, delay: number):
   ((...args: Parameters<T>) => void) => {
-  const timerRef = useRef<number | null>(null)
+  const timerRef = useRef<any>(null)
 
   const handler = (...args: Parameters<T>) => {
     if (timerRef.current) {
