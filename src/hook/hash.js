@@ -1,15 +1,18 @@
 import SparkMD5 from 'spark-md5'
 
+/**
+ * 耗时任务
+ * 开辟一个新的线程
+ * 计算分片hash
+ */
 onmessage = function (e) {
-  const file = e.data
+  const chunk = e.data
   const reader = new FileReader()
   const spark = new SparkMD5.ArrayBuffer()
-
-  reader.onload = function ({ target }) {
-    spark.append(target.result)
+  reader.onload = function (e) {
+    spark.append(e.target.result)
     const hash = spark.end()
-    postMessage(hash)
+    postMessage({ hash })
   }
-
-  reader.readAsArrayBuffer(file)
+  reader.readAsArrayBuffer(chunk)
 }

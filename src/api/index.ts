@@ -1,4 +1,4 @@
-import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
+import axios, { AxiosProgressEvent, AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 
 const newAxios = (type: string) => {
   const inst = axios.create({
@@ -32,52 +32,46 @@ const jsonInst = newAxios('application/json')
 
 const fileInst = newAxios('multipart/form-data')
 
-export interface Chunck {
+export interface Hash {
+  hash: string
+}
+
+export interface Chunk extends Hash {
   index: number
   file: Blob
-  hash: string
-  uploadId: string
 }
 
-export interface Merge {
+export interface Merge extends Hash {
   name: string
-  hash: string
   chunks: number
-  uploadId: string
 }
 
-export interface Next {
-  hash: string
-  uploadId: string
+export interface Name {
+  name: string
 }
 
-export type ProgressHandler = (value: number) => void
+export type ProgressHandler = (progressEvent: AxiosProgressEvent) => void
 
 export const test = () => {
   return jsonInst.get('/test')
 }
 
-export const state = (hash: string) => {
-  return jsonInst.post('/file/state', { hash })
-}
-
-export const next = (next: Next) => {
-  return jsonInst.post('/file/next', next)
+export const state = (hash: Hash) => {
+  return jsonInst.post('/file/state', hash)
 }
 
 export const merge = (data: Merge) => {
   return jsonInst.post('/file/merge', data)
 }
 
-export const upload = (chunck: Chunck, handle?: ProgressHandler) => {
+export const has = (name: Name) => {
+  return jsonInst.post('/file/exists', name)
+}
+
+export const upload = (chunk: Chunk, onUploadProgress?: ProgressHandler) => {
   const body = new FormData()
-  body.append('file', chunck.file)
-  body.append('hash', chunck.hash)
-  body.append('index', chunck.index.toString())
-  body.append('uploadId', chunck.uploadId)
-  return fileInst.post('/file/upload', body, {
-    onUploadProgress: ({loaded, total}) => {
-      handle && handle(total ? Math.round((loaded * 100) / total) : 0)
-    }
-  })
+  body.append('file', chunk.file)
+  body.append('hash', chunk.hash)
+  body.append('index', chunk.index.toString())
+  return fileInst.post('/file/upload', body, { onUploadProgress })
 }
