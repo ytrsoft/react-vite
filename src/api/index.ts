@@ -52,8 +52,8 @@ export interface Name {
 
 export type ProgressHandler = (progressEvent: AxiosProgressEvent) => void
 
-export const test = () => {
-  return jsonInst.get('/test')
+export const nearby = () => {
+  return jsonInst.get('/nearby')
 }
 
 export const state = (hash: Hash) => {
